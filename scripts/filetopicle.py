@@ -8,7 +8,7 @@ def read_input(inputdata = 0, reference = 0, datatype = "DNase-seq", cellline = 
     Return: pickle cantains list with design chr order
     convert the bed file to binary formate for each chr and output as a pickle for whole chr
     """
-    df = pd.read_csv('../data/GM12878_DNase.dms',sep="\t" , error_bad_lines=False, header = None)
+    df = pd.read_csv('/mnt/raisin/yuqing/GM12878_DNase.dms',sep="\t" , error_bad_lines=False, header = None)
     chrom_list = {}
     
     #mostly wrong here?
@@ -24,7 +24,7 @@ def read_input(inputdata = 0, reference = 0, datatype = "DNase-seq", cellline = 
     #print(chrom_list['chr1'])
 
     for lists in chrom_list:  
-        with open(datatype+'-'+cellline+'-'+lists+'.pkl', 'wb') as f:
+        with open('/mnt/raisin/yuqing/'+datatype+'-'+cellline+'-'+lists+'.pkl', 'wb') as f:
             pickle.dump(chrom_list[lists][0:20], f)
             
 def main():
