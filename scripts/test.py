@@ -8,7 +8,8 @@ Created on Mon Nov 13 22:11:27 2017
 
 import pickle
 
-with open('DNase-seq-human.pkl', 'rb') as f:
+with open('DNase-seq-human-chr1.pkl', 'rb') as f:
         mynewlist = pickle.load(f)
+        print(mynewlist)
         print(len(mynewlist))
-        print(len(mynewlist[0]))
+x
