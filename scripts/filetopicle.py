@@ -43,7 +43,7 @@ def read_input(inputdata = 0, reference = 0, datatype = "DNase-seq", cellline = 
     #print(chrom_list['chr1'])
 
     for lists in chrom_list:  
-        with open('/mnt/raisin/yuqing/pkl/'+datatype+'-'+cellline+'-'+lists+'.pkl', 'wb') as f:
+        with open('/mnt/raisin/yuqing/pkl/'+lists+'/'+datatype+'-'+cellline+'-'+lists+'.pkl', 'wb') as f:
             pickle.dump(chrom_list[lists], f)
             
 def main():
