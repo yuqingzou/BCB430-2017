@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 """
+Created on Fri Jun  2 13:30:50 2017
+http://learningtensorflow.com/lesson4/
 
-@author: yuqing.zou
+@author: hannah.li
 """
 
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import pickle
 
 class autoencodermodle(object):
     """A customer of autocodermodle. 
@@ -16,12 +19,11 @@ class autoencodermodle(object):
         inputfile: the location of the input file. @string
     """
 
-    def __init__(self,number_of_laye= 2.0,inputfile='',unit_list=[10,5]):
+    def __init__(self,number_of_laye= 2.0,inputfile=''):
         """Return a autoencoder object with default 2 layers and and also 
         initial the parameter*."""
         self.number_of_laye = number_of_laye
         self.inputfile = inputfile
-        self.unit_list = unit_list
         
         ### desire output attribute###
         self.hidden_1_weight = None
@@ -32,8 +34,7 @@ class autoencodermodle(object):
                 
     def session(self):
         ###read the csv file #####
-        df = pd.read_csv(self.inputfile, usecols = ['a1','a2','a3','a4','a5','a6','a7','a8','a9','a10','a11','a12','a13','a14','a15'])
-        print(self.number_of_laye,self.inputfile)
+        df = pickle.load(open("/Users/yisubai/Downloads/1000_1000.pkl", 'rb'))
         
         
         #### set the Parameters ####
@@ -45,13 +46,14 @@ class autoencodermodle(object):
         examples_to_show = 10
         
         # Network Parameters
-        n_hidden_1 = self.unit_list[0] # 1st layer num features, now initial as 10
-        n_hidden_2 = self.unit_list[1] # 2nd layer num features, now initial as 5
-        n_input = 15 # Q15 data input (img shape: 15)
+        n_hidden_1 = 500 # 1st layer num features, now initial as 10
+        n_hidden_2 = 250 # 2nd layer num features, now initial as 5
+
+        n_input = df.shape[1] # Q15 data input (img shape: 15)
         
         
         # tf data input placeholder
-        X = tf.placeholder("float", [None, n_input])
+        X = tf.placeholder("float", [10, df.shape[1]])
         
         # random initial the weight and biases for two layers
         weights = {
@@ -104,12 +106,12 @@ class autoencodermodle(object):
         optimizer = tf.train.RMSPropOptimizer(learning_rate).minimize(cost)
     
         # Initializing the variables
-        init = tf.initialize_all_variables()
+        init = tf.global_variables_initializer()
     
         # Launch the graph
         with tf.Session() as sess:
             sess.run(init)
-            total_batch = int(len(df)/batch_size)
+            total_batch = int(df.shape[0]/batch_size)
             # Training cycle
             for epoch in range(training_epochs):
                 # Loop over all batches
@@ -143,3 +145,12 @@ class autoencodermodle(object):
         print('second layer biases\n')
         print(self.hidden_2_biases) 
 
+
+def main():
+    auto = autoencodermodle()
+    auto.session()
+    auto.print_weight()
+    auto.print_biases()
+
+if __name__ == "__main__":
+    main()
