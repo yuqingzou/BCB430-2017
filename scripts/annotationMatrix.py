@@ -20,18 +20,21 @@ def annotation(time,size):
     result = np.array([])
     for i in range(time):
         rad_chrom_num = random.randint(1,22)
+        print("this is %s time" % i)
         for root, dirs, files in os.walk("/mnt/raisin/yuqing/pkl/chr"+str(rad_chrom_num)):
             print('Found directory: %s' % root)
+            allflattenRow = np.array([])
             for fname in files:
                 print('\t%s' % fname)
                 if fname.endswith(".pkl"):
-                    print(fname)           
-                    opencontacts = pickle.load(open("/mnt/raisin/yuqing/pkl/" + fname, 'rb'))
+                    opencontacts = pickle.load(open("/mnt/raisin/yuqing/pkl/chr" +str(rad_chrom_num)+'/'+ fname, 'rb'))
                     startNum = random.randint(0,len(opencontacts)-size+1)  
                     print('star :%d, and max :%d' % (startNum,len(opencontacts)))                  
                     flattenRow = np.asarray(opencontacts[startNum:startNum+size]).flatten()
-                    result = np.concatenate((result, flattenRow), axis=0)
-    result.shape = (time,size)
+                allflattenRow = np.append(allflattenRow, flattenRow)
+                print("now allflattenRow size is %s" % allflattenRow.size)
+            result = np.concatenate((result, allflattenRow), axis=0)
+    result.shape = (time,3*size)
     #save the result into pickle
     with open('/mnt/raisin/yuqing/pkl/annotate/'+str(time)+'_'+str(size)+'.pkl', 'wb') as f:
         pickle.dump(result,f)
